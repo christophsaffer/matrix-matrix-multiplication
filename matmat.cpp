@@ -18,5 +18,4 @@ void matmat(double alpha, bool trans,
 		}
 	}
 
-
 }
