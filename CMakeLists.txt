@@ -8,7 +8,7 @@ add_library(matmat matmat.cpp)
 add_library(matmatall matmatall.cpp)
 
 add_executable(matmat_exe main.cpp)
-target_link_libraries(matmat_exe matmat matmatall)
+target_link_libraries(matmat_exe matmatall matmat)
 
 find_package(OpenMP)
 if(OPENMP_FOUND)
@@ -18,4 +18,5 @@ endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
   target_compile_options(matmat_exe PRIVATE "-std=c++11" "-qopt-report=5" "-qopt-report-phase=vec")
+  target_compile_options(matmatall PRIVATE "-std=c++11" "-qopt-report=5" "-qopt-report-phase=vec")
 endif()
