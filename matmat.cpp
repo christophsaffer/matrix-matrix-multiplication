@@ -9,16 +9,14 @@ void matmat(double alpha, bool trans,
  	double beta,
  	double* c){
 
-	double d = 0;
-
-	for(int i=0; i < N; ++i){
-		for(int j=0; j < N; ++j){
-			d = 0;
-			for(int k=0; k < N; ++k){
-				d += alpha * a[k + N * j] * b[j + N * k];
+	for (int j=0; j < N; ++j){
+		for (int k=0; k < N; ++k) {
+			c[j * N + k] *= beta;
+			for (int i=0; i < N; ++i) {
+				c[j * N + k] += alpha * a[j * N + i] * b[i * N + k];
 			}
-			c[i + N * j] = d + beta * c[i + N * j];
 		}
 	}
+
 
 }

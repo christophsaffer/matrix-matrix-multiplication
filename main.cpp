@@ -6,10 +6,13 @@
 #include <vector>
 #include <random>
 
-int main (int argc, char** argv) {
+using std::chrono::system_clock;
+using std::chrono::duration;
+
+int testcase (){
 
 	double alpha = 2;
-	double beta = 0;
+	double beta = 0.5;
 	int n = 2;
 	double a[n*n] __attribute__((aligned(64)));
 	double b[n*n] __attribute__((aligned(64)));
@@ -25,17 +28,31 @@ int main (int argc, char** argv) {
 
 	double d = 0;
 	for (int i=0; i < n*n; ++i){
-		std::cout << c[i] << '\n';
+		d += c[i];
 	}
 
-	if (d != 943) {
-		return -1;
+	if (d == -104) {
+		return 1;
 	}
 	else {
+		return -1;
+	}
+
+}
+
+
+int main (int argc, char** argv) {
+	if (testcase() == 1){
 
 	  	int N;
-	  	std::istringstream inbuf(argv[1]);
-	  	inbuf >> N;
+	  	std::istringstream inbuf1(argv[1]);
+	  	inbuf1 >> N;
+
+	  	int M;
+	  	std::istringstream inbuf2(argv[2]);
+	  	inbuf2 >> M;
+
+	  	int const al = 16;
 
 	  	// Initialize random number generator
 		std::mt19937 gen(std::random_device{}());
@@ -43,24 +60,31 @@ int main (int argc, char** argv) {
 
 	 	// Initialize scalars alpha, beta and matrices a, b, c
 	 	double const alpha = dis(gen);
-		// std::vector<double> a(N*N);
-		// std::vector<double> b(N*N);
 		double const beta = dis(gen);
-		// std::vector<double> c(N*N);
-
-		double a[N*N] __attribute__((aligned(64)));
-		double b[N*N] __attribute__((aligned(64)));
-		double c[N*N] __attribute__((aligned(64)));
+		double a[N*N] __attribute__((aligned(al)));
+		double b[N*N] __attribute__((aligned(al)));
+		double c[N*N] __attribute__((aligned(al)));
 
 		for(int i=0; i < N*N; ++i){
 			a[i] = dis(gen);
 			b[i] = dis(gen);
-			c[i] = 0;
+			c[i] = dis(gen);
 		}
+		// Start time measuring
+		auto start = system_clock::now();
 
-		matmat(alpha, false, a, N, b, beta, c);
+		for (int i=0; i < M; ++i) {
+			matmat(alpha, false, a, N, b, beta, c);
+		}
+	
+		// Time measuring output
+ 		auto end = system_clock::now();
+ 		const double elapsed_seconds = duration<double>(end - start).count();
+		std::cout << "Duration: " << elapsed_seconds << "s" << std::endl;
 
-		std::cout << "Runs correctly, N: " << N << '\n';
 		return 0;
 	}
-}
+	else {
+		return -1;
+	}
+}	
