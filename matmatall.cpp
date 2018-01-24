@@ -3,12 +3,9 @@
 #include <iostream>
 #include <vector>
 
-void matmatall(double alpha, bool trans,
- 	double const* a, int M, int N, int lda,
- 	double const * b, int K, int ldb,
- 	double beta,
- 	double * c, int ldc){
+void matmatall(double alpha, double const* a, int M, int N, double const* b, int K, double beta, double* c){
 
+#pragma omp parallel for
 	for (int j=0; j < M; ++j){
 		for (int k=0; k < K; ++k) {
 			c[j * K + k] *= beta;
